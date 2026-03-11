@@ -7,10 +7,14 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+const PORT = process.env.PORT || 5000
+
+// CONNECT DATABASE
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("MongoDB Connected"))
 .catch(err=>console.log(err))
 
+// SCHEMA
 const BookingSchema = new mongoose.Schema({
   name:String,
   doctor:String,
@@ -20,6 +24,7 @@ const BookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model("Booking",BookingSchema)
 
+// ROUTES
 app.get("/",(req,res)=>{
   res.send("Doctor Booking API Running 🚀")
 })
@@ -30,18 +35,16 @@ app.post("/booking",async(req,res)=>{
   res.send("success")
 })
 
-app.get("/booking", async (req, res) => {
-  try {
+app.get("/booking",async(req,res)=>{
+  try{
     const data = await Booking.find()
     res.json(data)
-  } catch (error) {
-    console.error(error)
+  }catch(error){
     res.status(500).send("Database error")
   }
 })
 
-const PORT = process.env.PORT || 5000
-
+// START SERVER
 app.listen(PORT,()=>{
   console.log("Server running on port " + PORT)
 })
