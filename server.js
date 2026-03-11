@@ -16,7 +16,9 @@ time:String
 })
 
 const Booking = mongoose.model("Booking",BookingSchema)
-
+app.get("/", (req, res) => {
+  res.send("Doctor Booking API Running 🚀");
+});
 app.post("/booking",async(req,res)=>{
 const booking = new Booking(req.body)
 await booking.save()
