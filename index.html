@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Doctor Booking</title>
+</head>
+
+<body>
+
+<h2>Đặt lịch khám</h2>
+
+<input id="name" placeholder="Tên bệnh nhân"><br><br>
+<input id="doctor" placeholder="Bác sĩ"><br><br>
+<input id="date" type="date"><br><br>
+<input id="time" type="time"><br><br>
+
+<button onclick="book()">Đặt lịch</button>
+
+<h2>Danh sách lịch</h2>
+<ul id="list"></ul>
+
+<script>
+
+function book(){
+
+fetch("http://localhost:5000/booking",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+name:document.getElementById("name").value,
+doctor:document.getElementById("doctor").value,
+date:document.getElementById("date").value,
+time:document.getElementById("time").value
+})
+}).then(()=>load())
+
+}
+
+function load(){
+
+fetch("http://localhost:5000/booking")
+.then(res=>res.json())
+.then(data=>{
+
+let html=""
+
+data.forEach(b=>{
+html+=`<li>${b.name} - ${b.doctor} - ${b.date} - ${b.time}</li>`
+})
+
+document.getElementById("list").innerHTML=html
+
+})
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>
