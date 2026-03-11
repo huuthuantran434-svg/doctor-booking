@@ -33,9 +33,14 @@ app.post("/booking",async(req,res)=>{
   res.send("success")
 })
 
-app.get("/booking",async(req,res)=>{
-  const data = await Booking.find()
-  res.json(data)
+app.get("/booking", async (req, res) => {
+  try {
+    const data = await Booking.find()
+    res.json(data)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Database error")
+  }
 })
 
 const PORT = process.env.PORT || 5000
