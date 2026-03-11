@@ -16,46 +16,59 @@
 <button onclick="datLich()">Đặt lịch</button>
 <h2>Danh sách lịch</h2>
 
-<ul id="list"></ul>
+<div id="list"></div>
 
 <script>
+async function datLich(){
 
-function book(){
+const name = document.getElementById("name").value
+const doctor = document.getElementById("doctor").value
+const date = document.getElementById("date").value
+const time = document.getElementById("time").value
 
-fetch("http://localhost:5000/booking",{
+await fetch("https://doctor-booking-bx0n.onrender.com/booking",{
 method:"POST",
-headers:{'Content-Type':'application/json'},
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify({
-name:document.getElementById("name").value,
-doctor:document.getElementById("doctor").value,
-date:document.getElementById("date").value,
-time:document.getElementById("time").value
+name,
+doctor,
+date,
+time
 })
-}).then(()=>load())
+})
+
+alert("Đặt lịch thành công")
 
 }
-
-function load(){
-
-fetch("http://localhost:5000/booking")
-.then(res=>res.json())
-.then(data=>{
-
-let html=""
-
-data.forEach(b=>{
-html+=`<li>${b.name} - ${b.doctor} - ${b.date} - ${b.time}</li>`
-})
-
-document.getElementById("list").innerHTML=html
-
-})
-
-}
-
-load()
-
 </script>
 
+
 </body>
+<script>
+
+async function loadLich(){
+
+const res = await fetch("https://doctor-booking-bx0n.onrender.com/booking")
+const data = await res.json()
+
+const list = document.getElementById("list")
+
+list.innerHTML=""
+
+data.forEach(item=>{
+list.innerHTML += `
+<p>
+${item.name} - ${item.doctor} - ${item.date} - ${item.time}
+</p>
+`
+})
+
+}
+
+// load dữ liệu khi mở trang
+loadLich()
+
+</script>
 </html>
